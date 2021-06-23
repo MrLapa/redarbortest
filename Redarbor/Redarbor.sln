@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Redarbor.Api", "Redarbor.Ap
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Redarbor.Core", "Redarbor.Core\Redarbor.Core.csproj", "{00416612-F2A6-4300-8714-9662A4382930}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Redarbor.Infrastructure", "Redarbor.Infrastructure\Redarbor.Infrastructure.csproj", "{ACF4B2C9-C95F-453E-9B33-ECFC9C31EB14}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{00416612-F2A6-4300-8714-9662A4382930}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{00416612-F2A6-4300-8714-9662A4382930}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{00416612-F2A6-4300-8714-9662A4382930}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ACF4B2C9-C95F-453E-9B33-ECFC9C31EB14}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ACF4B2C9-C95F-453E-9B33-ECFC9C31EB14}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ACF4B2C9-C95F-453E-9B33-ECFC9C31EB14}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ACF4B2C9-C95F-453E-9B33-ECFC9C31EB14}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
