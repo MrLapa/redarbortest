@@ -7,9 +7,17 @@ namespace Redarbor.Core.Services
 {
     public class EmployeeService : IEmployeeService
     {
+        private readonly IUnitOfWork unitOfWork;
+        public EmployeeService(IUnitOfWork unitOfWork)
+        {
+            this.unitOfWork = unitOfWork;
+        }
+
         public Task<Employee> Add(Employee entity)
         {
-            throw new System.NotImplementedException();
+            var response = unitOfWork.EmployeeRepository.Add(entity);
+
+            return response;
         }
 
         public Task<Employee> Delete(Employee entity)
