@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 using Redarbor.Api.Validators;
 using Redarbor.Core.Interfaces;
 using Redarbor.Core.Services;
@@ -35,6 +36,11 @@ namespace Redarbor.Api
             services.AddScoped<IEmployeeService, EmployeeService>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
+            services.AddSwaggerGen(doc =>
+            {
+                doc.SwaggerDoc("v1", new OpenApiInfo { Title = "Sensem API", Version = "v1" });
+            });
+
             services.AddMvc().AddFluentValidation(options =>
             {
                 options.RegisterValidatorsFromAssemblyContaining<EmployeeRequestDtoValidator>();
@@ -50,6 +56,14 @@ namespace Redarbor.Api
             }
 
             app.UseHttpsRedirection();
+
+            app.UseSwagger();
+
+            app.UseSwaggerUI(option =>
+            {
+                option.SwaggerEndpoint("/swagger/v1/swagger.json", "Sensem API V1");
+                option.RoutePrefix = string.Empty;
+            });
 
             app.UseRouting();
 

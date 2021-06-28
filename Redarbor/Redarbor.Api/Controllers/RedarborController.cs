@@ -5,12 +5,14 @@ using Redarbor.Core.DTOs.Request;
 using Redarbor.Core.Entities;
 using Redarbor.Core.Interfaces;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace Redarbor.Api.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]    
+    [Route("api/[controller]")]
+    [Produces("application/json")]
     public class RedarborController : ControllerBase
     {
         private readonly IEmployeeService service;
@@ -23,6 +25,7 @@ namespace Redarbor.Api.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ApiResponse<Employee>))]
         public async Task<IActionResult> AddEmployee(EmployeeRequestDto employee)
         {
             var mappedEmployee = mapper.Map<Employee>(employee);
@@ -33,6 +36,7 @@ namespace Redarbor.Api.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ApiResponse<IReadOnlyList<Employee>>))]
         public async Task<IActionResult> GetEmployees()
         {            
             var employees = await service.GetAll();            
@@ -42,6 +46,7 @@ namespace Redarbor.Api.Controllers
         }
 
         [HttpGet("{id}")]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ApiResponse<Employee>))]
         public async Task<IActionResult> GetEmployee(int id)
         {
             var employee = await service.GetById(id);
@@ -51,6 +56,7 @@ namespace Redarbor.Api.Controllers
         }
 
         [HttpPut("{id}")]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ApiResponse<Employee>))]
         public async Task<IActionResult> UpdateEmployee(int id, EmployeeRequestDto employee)
         {
             var mappedSong = mapper.Map<Employee>(employee);            
@@ -61,6 +67,7 @@ namespace Redarbor.Api.Controllers
         }
 
         [HttpDelete("{id}")]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ApiResponse<string>))]
         public async Task<IActionResult> DeleteEmployee(int id)
         {            
             await service.Delete(id);            
