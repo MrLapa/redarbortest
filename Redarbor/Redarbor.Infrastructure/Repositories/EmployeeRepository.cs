@@ -34,8 +34,6 @@ namespace Redarbor.Infrastructure.Repositories
                 .EmployeeDataAccessRepository
                 .SetDataInDataBase(entity, procedure);
 
-            entity.Id = entityId;
-
             return entity;
         }
 
@@ -64,11 +62,9 @@ namespace Redarbor.Infrastructure.Repositories
         public async Task<Employee> Update(Employee entity)
         {
             string procedure = "UPDATE_EMPLOYEE";
-            var entityId = await unitOfWork
+            await unitOfWork
                 .EmployeeDataAccessRepository
                 .SetDataInDataBase(entity, procedure);
-
-            entity.Id = entityId;
 
             return entity;
         }

@@ -1,5 +1,6 @@
 ﻿using Redarbor.Core.Entities;
 using Redarbor.Core.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -35,9 +36,11 @@ namespace Redarbor.Core.Services
             throw new System.NotImplementedException();
         }
 
-        public Task<Employee> Update(Employee entity)
-        {
-            throw new System.NotImplementedException();
+        public async Task<Employee> Update(Employee entity)
+        {            
+            var result = await unitOfWork.EmployeeRepository.Update(entity);
+
+            return result;
         }
     }
 }
