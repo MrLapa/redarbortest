@@ -1,5 +1,4 @@
 ﻿using Redarbor.Core.Interfaces;
-using Redarbor.Infrastructure.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -31,11 +30,6 @@ namespace Redarbor.Infrastructure.Data
 
         public async Task<IReadOnlyList<T>> GetDataFromDataBase(string storeProcedure, int? id = null)
         {
-            if (string.IsNullOrEmpty(storeProcedure))
-            {
-                throw new ArgumentNullException("stored procedure");
-            }
-
             SqlParameter[] parameter = null;
 
             if (id != null)
@@ -47,7 +41,7 @@ namespace Redarbor.Infrastructure.Data
             }
 
             DataTable result = await executeProcedureGetDataAsync(storeProcedure, parameter);
-            var resultList = makeEntityFromDataTable(result);
+            var resultList = convertDataTableToList(result);
 
             return resultList;
         }
@@ -69,10 +63,10 @@ namespace Redarbor.Infrastructure.Data
                     Direction = ParameterDirection.Output
                 });
 
-                cmd.Parameters.AddRange(parameters);                
+                cmd.Parameters.AddRange(parameters);
             }
 
-            result = await cmd.ExecuteNonQueryAsync();
+            await cmd.ExecuteNonQueryAsync();
             result = (rowsAffected != null) ? (int)rowsAffected.Value : result;
             conn.Close();
 
@@ -84,9 +78,7 @@ namespace Redarbor.Infrastructure.Data
             SqlConnection conn = await openConnectionAsync();
             SqlCommand cmd = new SqlCommand(cmdText, conn);
             SqlDataReader reader = await cmd.ExecuteReaderAsync();
-            DataTable data = null;
-
-            conn.Open();
+            var data = new DataTable();
 
             if (parameters != null)
             {
@@ -112,9 +104,9 @@ namespace Redarbor.Infrastructure.Data
         }
 
         private SqlParameter convertPropertyToSqlParameter(PropertyInfo property, T entity)
-        {            
+        {
             SqlParameter parameter = new SqlParameter(string.Format("@{0}", property.Name), property.GetValue(entity));
-            
+
             return parameter;
         }
 
@@ -123,57 +115,6 @@ namespace Redarbor.Infrastructure.Data
             SqlParameter parameter = new SqlParameter("@id", value);
 
             return parameter;
-        }
-
-
-        private T convertFromDBValue(object obj)
-        {
-            T result = (obj == null || obj == DBNull.Value) ? default : (T)obj;
-
-            return result;
-        }
-
-        private List<T> makeEntityFromDataTable(DataTable data)
-        {
-            Type objType = typeof(T);
-            List<T> collection = new List<T>();
-
-            if (data == null || data.Rows.Count < 1)
-            {
-                return collection;
-            }
-
-            int matched = 0;
-
-            foreach (DataRow row in data.Rows)
-            {
-                T item = (T)Activator.CreateInstance(objType);
-                PropertyInfo[] properties = objType.GetProperties();
-
-                foreach (PropertyInfo property in properties)
-                {
-                    if (data.Columns.Contains(property.Name))
-                    {
-                        Type pType = property.PropertyType;
-                        var defaultValue = pType.GetDefaultValue();
-                        var value = row[property.Name];
-                        value = convertFromDBValue(value);
-                        property.SetValue(item, value);
-                        matched++;
-
-                        break;
-                    }
-                }
-
-                if (matched != data.Columns.Count)
-                {
-                    throw new Exception("Data retrieved does not match specified model.");
-                }
-
-                collection.Add(item);
-            }
-
-            return collection;
         }
 
         private async Task<SqlConnection> openConnectionAsync()
@@ -189,6 +130,37 @@ namespace Redarbor.Infrastructure.Data
             await conn.CloseAsync();
 
             throw new Exception("Connection could not be established");
+        }
+
+        private List<T> convertDataTableToList(DataTable dt)
+        {
+            List<T> data = new List<T>();
+            foreach (DataRow row in dt.Rows)
+            {
+                T item = getItem(row);
+                data.Add(item);
+            }
+            return data;
+        }
+        private T getItem(DataRow dr)
+        {
+            Type temp = typeof(T);
+            T obj = Activator.CreateInstance<T>();
+            PropertyInfo[] properties = temp.GetProperties();
+
+            foreach (DataColumn column in dr.Table.Columns)
+            {
+                foreach (PropertyInfo pro in properties)
+                {
+                    if (pro.Name == column.ColumnName)
+                    {
+                        pro.SetValue(obj, dr[column.ColumnName], null);
+                        break;
+                    }
+                }
+            }
+
+            return obj;
         }
     }
 }
