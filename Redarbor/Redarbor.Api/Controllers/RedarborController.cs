@@ -41,6 +41,15 @@ namespace Redarbor.Api.Controllers
             return Ok(response);
         }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetEmployee(int id)
+        {
+            var employee = await service.GetById(id);
+            var response = new ApiResponse<Employee>(employee);
+
+            return Ok(response);
+        }
+
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateEmployee(int id, EmployeeRequestDto employee)
         {

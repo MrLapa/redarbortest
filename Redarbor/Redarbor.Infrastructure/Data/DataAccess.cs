@@ -75,16 +75,20 @@ namespace Redarbor.Infrastructure.Data
 
         private async Task<DataTable> executeProcedureGetDataAsync(string cmdText, SqlParameter[] parameters = null)
         {
-            SqlConnection conn = await openConnectionAsync();
-            SqlCommand cmd = new SqlCommand(cmdText, conn);
-            SqlDataReader reader = await cmd.ExecuteReaderAsync();
-            var data = new DataTable();
+            SqlConnection conn = await openConnectionAsync();            
+            SqlCommand cmd = new SqlCommand(cmdText, conn)
+            {
+                CommandType = CommandType.StoredProcedure
+            };
 
             if (parameters != null)
             {
                 cmd.Parameters.AddRange(parameters);
             }
 
+            SqlDataReader reader = await cmd.ExecuteReaderAsync();
+            
+            var data = new DataTable();
             data.Load(reader);
             conn.Close();
 
@@ -112,7 +116,7 @@ namespace Redarbor.Infrastructure.Data
 
         private SqlParameter convertObjectToSqlParameter(object value)
         {
-            SqlParameter parameter = new SqlParameter("@id", value);
+            SqlParameter parameter = new SqlParameter("@Id", value);
 
             return parameter;
         }

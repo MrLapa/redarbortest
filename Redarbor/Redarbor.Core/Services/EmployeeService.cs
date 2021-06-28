@@ -28,9 +28,11 @@ namespace Redarbor.Core.Services
             return data;
         }
 
-        public Task<Employee> GetById(int id)
+        public async Task<Employee> GetById(int id)
         {
-            throw new System.NotImplementedException();
+            var data = await unitOfWork.EmployeeRepository.GetById(id);
+
+            return data;
         }
 
         public async Task<Employee> Update(Employee entity)
