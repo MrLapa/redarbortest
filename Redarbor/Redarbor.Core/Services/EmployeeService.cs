@@ -36,14 +36,15 @@ namespace Redarbor.Core.Services
             return data;
         }
 
-        public async Task<Employee> Update(Employee entity)
+        public async Task<Employee> Update(int id, Employee entity)
         {
-            var employee = await GetById(entity.Id);
+            var employee = await GetById(id);
             if (employee == null)
             {
                 throw new BusinessException("Employee doesn't exist");
             }
 
+            entity.Id = id;
             await unitOfWork.EmployeeRepository.Update(entity);
 
             return entity;

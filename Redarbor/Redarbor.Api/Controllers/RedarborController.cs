@@ -53,9 +53,8 @@ namespace Redarbor.Api.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateEmployee(int id, EmployeeRequestDto employee)
         {
-            var mappedSong = mapper.Map<Employee>(employee);
-            mappedSong.Id = id;
-            var addedEmployee = await service.Update(mappedSong);            
+            var mappedSong = mapper.Map<Employee>(employee);            
+            var addedEmployee = await service.Update(id, mappedSong);            
             var response = new ApiResponse<Employee>(addedEmployee);
 
             return Ok(response);
