@@ -7,6 +7,7 @@ using Microsoft.Extensions.Hosting;
 using Redarbor.Api.Validators;
 using Redarbor.Core.Interfaces;
 using Redarbor.Core.Services;
+using Redarbor.Infrastructure.Filters;
 using Redarbor.Infrastructure.Repositories;
 using System;
 
@@ -26,7 +27,10 @@ namespace Redarbor.Api
         {
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-            services.AddControllers();
+            services.AddControllers(options =>
+            {
+                options.Filters.Add<GlobalExceptionFilter>();
+            });
 
             services.AddScoped<IEmployeeService, EmployeeService>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();

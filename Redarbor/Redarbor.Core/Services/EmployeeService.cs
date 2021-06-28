@@ -1,4 +1,5 @@
 ﻿using Redarbor.Core.Entities;
+using Redarbor.Core.Exceptions;
 using Redarbor.Core.Interfaces;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -36,7 +37,13 @@ namespace Redarbor.Core.Services
         }
 
         public async Task<Employee> Update(Employee entity)
-        {            
+        {
+            var employee = await GetById(entity.Id);
+            if (employee == null)
+            {
+                throw new BusinessException("Employee doesn't exist");
+            }
+
             await unitOfWork.EmployeeRepository.Update(entity);
 
             return entity;
@@ -44,6 +51,12 @@ namespace Redarbor.Core.Services
 
         public async Task Delete(int id)
         {
+            var employee = await GetById(id);
+            if (employee == null)
+            {
+                throw new BusinessException("Employee doesn't exist");
+            }
+
             await unitOfWork.EmployeeRepository.Delete(id);
         }
     }
