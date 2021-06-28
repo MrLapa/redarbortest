@@ -7,5 +7,6 @@ namespace Redarbor.Core.Interfaces
     {
         Task<int> Add(Employee entity);
         Task<int> Update(Employee entity);
+        Task<int> Delete(int id);
     }
 }

@@ -8,10 +8,13 @@ namespace Redarbor.Infrastructure.Repositories
     {
         private readonly IEmployeeRepository employeeRepository;
         private readonly IDataAccess<Employee> employeeDataAccessRepository;
+        private readonly IDataAccess<DeleteEntity> deleteEntityDataAccess;
 
         public IEmployeeRepository EmployeeRepository => employeeRepository
             ?? new EmployeeRepository(this);
         public IDataAccess<Employee> EmployeeDataAccessRepository => employeeDataAccessRepository
             ?? new DataAccess<Employee>();
+        public IDataAccess<DeleteEntity> DeleteEntityDataAccess => deleteEntityDataAccess
+            ?? new DataAccess<DeleteEntity>();
     }
 }

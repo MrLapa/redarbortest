@@ -39,5 +39,10 @@ namespace Redarbor.Core.Services
 
             return entity;
         }
+
+        public async Task Delete(int id)
+        {
+            await unitOfWork.EmployeeRepository.Delete(id);
+        }
     }
 }

@@ -6,5 +6,6 @@ namespace Redarbor.Core.Interfaces
     {
         IEmployeeRepository EmployeeRepository { get; }
         IDataAccess<Employee> EmployeeDataAccessRepository { get; }
+        IDataAccess<DeleteEntity> DeleteEntityDataAccess { get; }
     }
 }

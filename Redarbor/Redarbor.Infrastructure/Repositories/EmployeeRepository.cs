@@ -25,6 +25,21 @@ namespace Redarbor.Infrastructure.Repositories
             return entityId;
         }
 
+        public async Task<int> Delete(int id)
+        {
+            var deleteEntity = new DeleteEntity
+            {
+                Id = id
+            };
+
+            string procedure = "DELETE_EMPLOYEE";
+            int affectedRows = await unitOfWork
+                .DeleteEntityDataAccess
+                .SetDataInDataBase(deleteEntity, procedure);
+
+            return affectedRows;
+        }
+
         public async Task<IReadOnlyList<Employee>> GetAll()
         {
             string procedure = "GET_EMPLOYEES";
