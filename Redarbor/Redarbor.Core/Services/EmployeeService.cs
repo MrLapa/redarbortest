@@ -1,6 +1,5 @@
 ﻿using Redarbor.Core.Entities;
 using Redarbor.Core.Interfaces;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -14,21 +13,19 @@ namespace Redarbor.Core.Services
             this.unitOfWork = unitOfWork;
         }
 
-        public Task<Employee> Add(Employee entity)
+        public async Task<Employee> Add(Employee entity)
         {
-            var response = unitOfWork.EmployeeRepository.Add(entity);
+            var entityId = await unitOfWork.EmployeeRepository.Add(entity);
+            entity.Id = entityId;
 
-            return response;
+            return entity;
         }
 
-        public Task<Employee> Delete(Employee entity)
+        public async Task<IReadOnlyList<Employee>> GetAll()
         {
-            throw new System.NotImplementedException();
-        }
-
-        public Task<IReadOnlyList<Employee>> GetAll()
-        {
-            throw new System.NotImplementedException();
+            var data = await unitOfWork.EmployeeRepository.GetAll();
+            
+            return data;
         }
 
         public Task<Employee> GetById(int id)
@@ -38,9 +35,9 @@ namespace Redarbor.Core.Services
 
         public async Task<Employee> Update(Employee entity)
         {            
-            var result = await unitOfWork.EmployeeRepository.Update(entity);
+            await unitOfWork.EmployeeRepository.Update(entity);
 
-            return result;
+            return entity;
         }
     }
 }

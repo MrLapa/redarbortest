@@ -15,31 +15,19 @@ namespace Redarbor.Infrastructure.Repositories
             this.unitOfWork = unitOfWork;
         }
 
-        public async Task<Employee> Add(Employee entity)
+        public async Task<int> Add(Employee entity)
         {
             string procedure = "ADD_EMPLOYEE";
             var entityId = await unitOfWork
                 .EmployeeDataAccessRepository
                 .SetDataInDataBase(entity, procedure);
 
-            entity.Id = entityId;
-
-            return entity;
-        }
-
-        public async Task<Employee> Delete(Employee entity)
-        {
-            string procedure = "DELETE_EMPLOYEE";
-            var entityId = await unitOfWork
-                .EmployeeDataAccessRepository
-                .SetDataInDataBase(entity, procedure);
-
-            return entity;
+            return entityId;
         }
 
         public async Task<IReadOnlyList<Employee>> GetAll()
         {
-            string procedure = "GET_EMPLOYEE";
+            string procedure = "GET_EMPLOYEES";
             var data = await unitOfWork
                 .EmployeeDataAccessRepository
                 .GetDataFromDataBase(procedure);
@@ -49,7 +37,7 @@ namespace Redarbor.Infrastructure.Repositories
 
         public async Task<Employee> GetById(int id)
         {
-            string procedure = "GET_EMPLOYEES";
+            string procedure = "GET_EMPLOYEE";
             var data = await unitOfWork
                 .EmployeeDataAccessRepository
                 .GetDataFromDataBase(procedure, id);
@@ -59,14 +47,14 @@ namespace Redarbor.Infrastructure.Repositories
             return employee;
         }
 
-        public async Task<Employee> Update(Employee entity)
+        public async Task<int> Update(Employee entity)
         {
             string procedure = "UPDATE_EMPLOYEE";
-            await unitOfWork
+            int affectedRows = await unitOfWork
                 .EmployeeDataAccessRepository
                 .SetDataInDataBase(entity, procedure);
 
-            return entity;
+            return affectedRows;
         }
     }
 }
